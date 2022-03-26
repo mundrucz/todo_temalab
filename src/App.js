@@ -9,7 +9,7 @@ function App(){
   const [state, setState]=useState({
     "todo": {
       title: "Todo",
-      items: ["f"]
+      items: []
     },
     "inprogress": {
       title: "In Progress",
@@ -21,7 +21,7 @@ function App(){
     },
     "blocked":{
       title: "Blocked",
-      items: ["ff"]
+      items: []
     },
   })
 
@@ -55,6 +55,27 @@ function App(){
   setTitle("")
   }
 
+  function handleDragEnd({destination, source}){
+    if (!destination) {
+      return
+    }
+
+    if (destination.index === source.index && destination.droppableId === source.droppableId) {
+      return
+    }
+
+    const itemCopy = {...state[source.droppableId].items[source.index]}
+
+    setState(prev => {
+      prev = {...prev}
+      prev[source.droppableId].items.splice(source.index, 1)
+
+      prev[destination.droppableId].items.splice(destination.index, 0, itemCopy)
+
+      return prev
+    })
+  }
+
 
   return(
     <div>
@@ -69,43 +90,43 @@ function App(){
       Add
       </button>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridGap: 20 }}>
-        <div className='coloumn'>
-          {state.todo.title}
-          {state.todo.items.map(item =>
-          <div>
-            {item.title}, {item.note},{item.deadline}
-          </div>)
-          }
-        </div>
+      <div >
+      
+      <DragDropContext >
+        {_.map(state, (s, key) => {
+          return(
+            <div key={key}>
+              <h3>{s.title}</h3>
+              <Droppable droppableId={key}>
+                {(provided) => {
+                  return(
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {s.items.map((item, index) => {
+                        return(
+                          <Draggable key={item.id} index={index} draggableId={item.id}>
+                            {(provided) => {
+                              return(
+                                <div ref={provided.innerRef} {...provided.draggableProps}{...provided.dragHandleProps}>
+                                  {item.title},
+                                  {item.note},
+                                  {item.deadline}
+                                </div>
+                              )
+                            }}
+                          </Draggable>
+                        )
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }}
+              </Droppable>
+            </div>
+          )
+        })}
+      </DragDropContext>
 
-        <div className='coloumn'>
-          {state.inprogress.title}
-          {state.inprogress.items.map(item =>
-          <div>
-            {item.title}, {item.note},{item.deadline}
-          </div>)
-          }
-        </div>
-
-        <div className='coloumn'>
-          {state.done.title}
-          {state.done.items.map(item =>
-          <div>
-            {item.title}, {item.note},{item.deadline}
-          </div>)
-          }
-        </div>
-
-        <div className='coloumn'>
-          {state.blocked.title}
-          {state.blocked.items.map(item =>
-          <div>
-            {item.title}, {item.note},{item.deadline}
-          </div>)
-          }
-        </div>
-        </div>
+      </div>
       
     </div>
       
