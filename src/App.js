@@ -55,7 +55,7 @@ function App(){
   setTitle("")
   }
 
-  function handleDragEnd({destination, source}){
+  const handleDragEnd = ({destination, source}) => {
     if (!destination) {
       return
     }
@@ -69,9 +69,7 @@ function App(){
     setState(prev => {
       prev = {...prev}
       prev[source.droppableId].items.splice(source.index, 1)
-
       prev[destination.droppableId].items.splice(destination.index, 0, itemCopy)
-
       return prev
     })
   }
@@ -79,6 +77,7 @@ function App(){
 
   return(
     <div>
+      <div >
       title:
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       note:
@@ -89,14 +88,17 @@ function App(){
       <button type="button" onClick={() => addNew(title, note, deadline)}>
       Add
       </button>
+      </div>
 
-      <div >
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridGap: 20, backgroundColor:'#FF0000'}} >
       
-      <DragDropContext >
+      <DragDropContext onDragEnd={handleDragEnd}>
         {_.map(state, (s, key) => {
           return(
             <div key={key}>
+
               <h3>{s.title}</h3>
+
               <Droppable droppableId={key}>
                 {(provided) => {
                   return(
@@ -121,6 +123,7 @@ function App(){
                   )
                 }}
               </Droppable>
+
             </div>
           )
         })}
