@@ -3,6 +3,7 @@ import './App.css';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import _ from "lodash";
 import {v4} from 'uuid';
+import 'bootstrap'; //
 
 function App(){
 
@@ -76,39 +77,43 @@ function App(){
 
 
   return(
-    <div>
-      <div >
-      title:
+    
+    <div> 
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="space"></div>
+      Title:
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-      note:
+      <div class="space"></div>
+      Note:
       <input type="text" value={note} onChange={(e) => setNote(e.target.value)}/>
-      deadline:
+      <div class="space"></div>
+      Deadline:
       <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)}/>
   
       <button type="button" onClick={() => addNew(title, note, deadline)}>
       Add
       </button>
-      </div>
+      </nav>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridGap: 20, backgroundColor:'#FF0000'}} >
+      <div class="rounded container" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridGap: 20, backgroundColor:'#d9cece'}} > 
       
       <DragDropContext onDragEnd={handleDragEnd}>
         {_.map(state, (s, key) => {
           return(
-            <div key={key}>
+            <div key={key} >
 
               <h3>{s.title}</h3>
 
-              <Droppable droppableId={key}>
+              <Droppable droppableId={key}  >
                 {(provided) => {
                   return(
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                    <div ref={provided.innerRef} {...provided.droppableProps} >
                       {s.items.map((item, index) => {
                         return(
-                          <Draggable key={item.id} index={index} draggableId={item.id}>
+                          <Draggable key={item.id} index={index} draggableId={item.id}> 
                             {(provided) => {
                               return(
-                                <div ref={provided.innerRef} {...provided.draggableProps}{...provided.dragHandleProps}>
+                                <div class="rounded Dragitem" ref={provided.innerRef} {...provided.draggableProps}{...provided.dragHandleProps}>
                                   {item.title},
                                   {item.note},
                                   {item.deadline}

@@ -24,6 +24,7 @@
   color: white;
 }
 
+
 .App-link {
   color: #61dafb;
 }
@@ -35,4 +36,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+.Dragitem {
+  background-color:'#ffffff';
+  height: 30px;
+  background-color: #ffffff;
+}
+.container{
+  min-height: 10%;
+  height: 10%;
+}
+.space{
+  width: 20px;
 }
